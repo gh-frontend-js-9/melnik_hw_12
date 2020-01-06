@@ -18,7 +18,7 @@
         </button>
         <i class="fas fa-search"></i>
         <i class="far fa-bell"></i>
-        <div>
+        <div class="header__avatar">
             <img src="../../assets/images/user2.jpg" alt="">
             <i class="fas fa-chevron-down"></i>
         </div>
@@ -34,7 +34,7 @@
     </div>
     <div class="section__content">
         <div class="content__nav">
-            <div>
+            <div class="content__nav__types">
                 <span>
                     <i class="fas fa-inbox"></i>
                     Inbox (2)
@@ -48,7 +48,7 @@
                     Trash
                 </span>
             </div>
-            <div>
+            <div class="content__nav__filter">
                 Filter message:
                 <select>
                     <option value="1" selected>Date</option>
@@ -58,69 +58,40 @@
         <div class="content_content">
             <div class="dialogs">
                 <div class="dialogs-item">
-                    <img class="dialogs__avatar" src="../../assets/images/user1.jpg" alt="">
+                    <div class="dialogs-item__person">
+                        <img class="dialogs__avatar" src="../../assets/images/user1.jpg" alt="">
+                        <span class="dialog__name">Artem Melnik</span>
+                    </div>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusm.
-                        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                        aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                        culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus
-                        error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab
-                        illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam
-                        voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores
-                        eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia
-                        dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut
-                        labore et dolore magnam aliquam quaerat voluptatem.
+                        dolore magna aliqua.
                     </p>
                 </div>
-                <button>
+                <button class="dialogs-add">
                     <i class="fas fa-plus"></i>
                     New coversation
                 </button>
             </div>
             <div class="dialog">
-                <div>
-                    <div class="dialog-message your">
+                <div class="dialog-items">
+                    <div class="dialog-message">
                         <img src="../../assets/images/user1.jpg" alt="">
                         <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ulla
-                            pariatur. est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                            accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore
-                            veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem
-                            quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui
-                            ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor
-                            sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut
-                            labore et dolore magnam aliquam quaerat voluptatem.</p>
+                            pariatur. est laborum.</p>
                     </div>
                     <div class="dialog-message my">
                         <img src="../../assets/images/user2.jpg" alt="">
                         <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                            ex ea commo. Duis aute irure dolor in reprehenderit in
-                            voluptate velit esse cillum dolore eu fugiat
-                            ulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                            deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit
-                            voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo
-                            inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam
-                            voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni
-                            dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem
-                            ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi
-                            tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                            ex ea commo.</p>
                     </div>
                 </div>
-                <input type="text" id="message">
+                <input type="text" id="message" placeholder="Write a message...">
             </div>
             <div class="user_info">
                 <img class="user-info__avatar" src="../../assets/images/user1.jpg" alt="">
                 <p class="user-info__name">Artem Melnik</p>
                 <p class="desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
                     incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-                    voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde
-                    omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque
-                    ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo
-                    enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni
-                    dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia
-                    dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut
-                    labore et dolore magnam aliquam quaerat voluptatem.</p>
+                    ullamco laboris nis.</p>
                 <p class="title">Email</p>
                 <p class="text">amarsik010@gmail.com</p>
                 <p class="title">Phone</p>
