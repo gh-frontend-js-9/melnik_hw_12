@@ -157,6 +157,8 @@ section{
 .dialog-items{
     display: flex;
     flex-direction: column;
+    max-height: 600px;
+    overflow: auto;
 }
 .dialog-message{
     display: flex;
@@ -211,9 +213,15 @@ section{
     height: 200px;
     border-radius: 50%;
 }
-.user-info__name{
+p.user-info__name{
     font-weight: bold;
     font-size: 22px;
+    margin-bottom: 0;
+}
+.user_info .work{
+    color: #9ea3b4;
+    font-weight: bold;
+    margin-top: 0;
 }
 .user_info .desc{
     color: #9ca1b2;
