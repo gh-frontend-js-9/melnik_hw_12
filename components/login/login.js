@@ -23,8 +23,6 @@ async function login() {
   const json = await response.json();
 
   if(response.ok) {
-    alert("Привет " + json.name);
-
     fetch('http://localhost:3000/api/users/login', {
       mode: 'cors',
       method: 'POST',
@@ -34,7 +32,8 @@ async function login() {
       body: JSON.stringify(data)
     });
     message.innerText = "Success";
-    window.localStorage.setItem("key", response.headers.get('x-auth-token'));
+    window.localStorage.setItem("token", response.headers.get('x-auth-token'));
+    window.location.href = "../messages/messages.html";
   }
   else{
     message.classList.add("error");
