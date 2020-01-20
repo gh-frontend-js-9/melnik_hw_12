@@ -159,6 +159,7 @@ section{
     display: flex;
     flex-direction: column;
     max-height: 600px;
+    min-height: 400px;
     overflow: auto;
     width: 100%;
 }

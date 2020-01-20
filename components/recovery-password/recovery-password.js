@@ -32,7 +32,7 @@ async function recoverPass() {
             },
             body: JSON.stringify(data)
         };
-        let response = await fetch('http://localhost:3000/api/users/reset_password', options);
+        let response = await fetch('https://geekhub-frontend-js-9.herokuapp.com/api/users/reset_password', options);
         const json = await response.json();
         if (response.ok) {
             console.log(json);

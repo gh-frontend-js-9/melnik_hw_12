@@ -1,9 +1,9 @@
-async function sign() {
+message = document.getElementById('message');
 
+async function sign() {
   const email = document.getElementById("email").value;
   const pass = document.getElementById('password').value;
   const name = document.getElementById('name').value;
-  const message = document.getElementById('message');
   let error = false;
   let errorText = '';
 
@@ -26,8 +26,8 @@ async function sign() {
       },
       body: JSON.stringify(data)
     };
-    let response = await fetch('http://localhost:3000/api/users/', options);
-    message.innerHTML = "Successful";
+    let response = await fetch('https://geekhub-frontend-js-9.herokuapp.com/api/users/', options);
+    return response;
   }
   else{
     message.innerHTML = errorText;
@@ -36,5 +36,12 @@ async function sign() {
 const form = document.getElementById("form");
 form.addEventListener("submit", function(e) {
   e.preventDefault();
-  sign();
+  sign().then(r => {
+    if (r.ok){
+      message.innerHTML = "Successful";
+    }
+    else{
+
+    }
+  });
 });

@@ -4,12 +4,73 @@ class HTMLRender {
         let elem = document.createElement(tags);
         elem.classList.add(...className);
         elem.textContent = text;
-        elem.setAttribute(title, value);
+        if (title != '')
+            elem.setAttribute(title, value);
         return elem;
     }
 }
-if(!localStorage.token)
+
+let currentThread = {
+    "_id": 0,
+    "users": {
+        "me": [],
+        'user': []
+    },
+    'idUser': ''
+}
+if (!localStorage.token)
     window.location.href = "../login/login.html";
+
+async function getUserById(_id) {
+    const options = {
+        method: 'GET',
+        headers: {
+            'x-access-token': localStorage.token,
+        }
+    };
+    let response = await fetch('https://geekhub-frontend-js-9.herokuapp.com/api/users/' + _id, options);
+    return await response.json();
+}
+
+async function getCurrentUser() {
+    const options = {
+        method: 'GET',
+        headers: {
+            'x-access-token': localStorage.token,
+        }
+    };
+    let response = await fetch('https://geekhub-frontend-js-9.herokuapp.com/api/users/', options);
+    return await response.json();
+}
+
+async function _createThread(_id) {
+    const obj = {
+        "user": {
+            "_id": _id
+        }
+    };
+    const options = {
+        method: 'POST',
+        headers: {
+            'x-access-token': localStorage.token,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(obj)
+    };
+    let response = await fetch('https://geekhub-frontend-js-9.herokuapp.com/api/threads', options);
+    return await response.json();
+}
+
+async function getAllUsers() {
+    const options = {
+        method: 'GET',
+        headers: {
+            'x-access-token': localStorage.token
+        },
+    };
+    let response = await fetch('https://geekhub-frontend-js-9.herokuapp.com/api/users/all', options);
+    return await response.json();
+}
 
 async function getThreads() {
 
@@ -20,7 +81,7 @@ async function getThreads() {
         },
     };
 
-    let response = await fetch('http://localhost:3000/api/threads', options);
+    let response = await fetch('https://geekhub-frontend-js-9.herokuapp.com/api/threads', options);
     return await response.json();
 }
 
@@ -34,79 +95,124 @@ async function getThreadMessages(_id) {
         }
     };
 
-    let response = await fetch('http://localhost:3000/api/threads/messages/' + _id, options);
-
+    let response = await fetch('https://geekhub-frontend-js-9.herokuapp.com/api/threads/messages/' + _id, options);
     return await response.json();
 }
 
 async function sendMessage(_id, text) {
-
+    const obj = {
+        "thread": {
+            "_id": _id
+        },
+        "message": {
+            "body": text
+        }
+    };
     const options = {
         method: 'POST',
         headers: {
-            'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTEzMGJmZTliNjEwYTgzNjNiNGIzMTkiLCJpYXQiOjE1NzgzNDI5Mzh9.09dZkCRoebOXgreM-MV9NjwK3puc2NYvb21WUKkT_nE',
+            'Authorization': localStorage.token,
             'Content-Type': 'application/json'
         },
-        body: {
-            "thread": {
-                "_id": _id
-            },
-            "message": {
-                "body": text
-            }
-        }
+        body: JSON.stringify(obj)
     };
 
-    let response = await fetch('http://localhost:3000/api/threads/messages', options);
-
+    let response = await fetch('https://geekhub-frontend-js-9.herokuapp.com/api/threads/messages', options);
     return await response.json();
 }
 
-getThreads().then(json => {
-    for (let i = 0; i < json.length; i++) {
-        let thread = json[i];
-        let name;
-        if (!thread.users[1].me)
-            name = thread.users[1].name;
-        else
-            name = thread.users[0].name;
-        let lastMessage = thread.last_message.body;
-        renderThread(name, lastMessage, thread._id);
-    }
-    renderNewThreadBtn();
-});
+function getThread() {
+    let dialogsBlock = document.getElementById('dialogs');
+    dialogsBlock.innerHTML = "";
+    let usersTmp = [], users = [], me = [];
+    getAllUsers().then(response => {
+        response.map(x => usersTmp.push(x));
+    });
+    getCurrentUser().then(r => me = r);
+    getThreads().then(json => {
+        for (let i = 0; i < json.length; i++) {
+            let thread = json[i];
+            let user;
 
-function getThreadMessage(_id) {
-    getThreadMessages(_id).then(data => {
-        let me, interlocutor;
-        if (data.users[0].me) {
-            me = data.users[0]._id;
-            interlocutor = 1;
-        } else {
-            me = data.users[1]._id;
-            interlocutor = 0;
+            if (thread.users[1]._id === me._id)
+                user = thread.users[0];
+            else
+                user = thread.users[1];
+
+            users.push(user);
+            renderThread(user.name, '', thread._id, "getThreadMessage");
         }
-
-        let dialogMessagesBlock = document.getElementById('dialog-messages');
-        dialogMessagesBlock.innerHTML = "";
-        data.messages.map(x => {
-            renderThreadMessage(x.body, x.user, me);
-        });
-        dialogMessagesBlock.scrollTop = dialogMessagesBlock.scrollHeight;
-
-        renderUserInfo(data.users[interlocutor]);
-
-        let form = document.getElementById('form');
-        let message = document.getElementById('message');
-        message.style.display = 'block';
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            sendMessage(_id, message.value);
-            renderThreadMessage(message.value, me, me);
-            message.value = "";
-            dialogMessagesBlock.scrollTop = dialogMessagesBlock.scrollHeight;
+        renderCreateThread();
+        let result = removeUsers(usersTmp, users, me);
+        result.map(user => {
+            renderThread(user.name, "", user._id, "createThread")
         });
     });
+}
+
+function removeUsers(arr1, arr2, me) {
+    let _tmp = [];
+    arr1.forEach(element => {
+        let q = 0;
+        arr2.forEach(element2 => {
+            if (element._id === element2._id || element._id === me._id)
+                q++;
+        });
+        if (q === 0)
+            _tmp.push(element);
+    });
+    return _tmp;
+}
+
+getThread();
+
+function createThread(_id) {
+    _createThread(_id).then(r => {
+        getThread();
+        currentThread = r;
+        currentThread.idUser = _id;
+    });
+}
+
+function getThreadMessage(_id) {
+    getCurrentUser().then(r => currentThread.me = r);
+    getThreads().then(r => {
+        r.filter(x => {
+            if (x._id === _id) {
+                if (x.users[0]._id === currentThread.me._id)
+                    currentThread.idUser = x.users[1]._id;
+                else
+                    currentThread.idUser = x.users[0]._id;
+
+            }
+        });
+        getUserById(currentThread.idUser).then(r => {
+            currentThread.user = r;
+            getThreadMessages(_id).then(data => {
+                let dialogMessagesBlock = document.getElementById('dialog-messages');
+                let form = document.getElementById('form');
+                let message = document.getElementById('message');
+                dialogMessagesBlock.innerHTML = "";
+                data.map(x => {
+                    renderThreadMessage(x.body, x.user, currentThread.me);
+                });
+
+                dialogMessagesBlock.scrollTop = dialogMessagesBlock.scrollHeight;
+
+                renderUserInfo(currentThread.user);
+                message.style.display = 'block';
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    sendMessage(_id, message.value).then(r => {
+                        renderThreadMessage(message.value, currentThread.me, currentThread.me);
+                        message.value = "";
+                        dialogMessagesBlock.scrollTop = dialogMessagesBlock.scrollHeight;
+                    });
+                });
+            });
+        });
+    });
+
 }
 
 function renderUserInfo(user) {
@@ -189,7 +295,7 @@ function renderUserInfo(user) {
 
 function renderThreadMessage(text, author, me) {
     let messageItemDiv, messageItemImg;
-    if (author === me) {
+    if (author._id === me._id) {
         messageItemDiv = HTMLRender.render({
             tags: 'div',
             className: ['dialog-message', 'my'],
@@ -220,7 +326,7 @@ function renderThreadMessage(text, author, me) {
     dialogMessagesBlock.append(messageItemDiv);
 }
 
-function renderNewThreadBtn() {
+function renderCreateThread() {
     let button = HTMLRender.render({
         tags: 'button',
         className: ['dialogs-add'],
@@ -235,12 +341,12 @@ function renderNewThreadBtn() {
     dialogsBlock.append(button);
 }
 
-function renderThread(name, message, _id) {
+function renderThread(name, message, _id, functionStr) {
     let dialogsItemDiv = HTMLRender.render({
         tags: 'div',
         className: ['dialogs-item'],
         title: 'onclick',
-        value: 'getThreadMessage("' + _id + '")'
+        value: functionStr + '("' + _id + '")'
     });
     let dialogsItemPersonDiv = HTMLRender.render({
         tags: 'div',
