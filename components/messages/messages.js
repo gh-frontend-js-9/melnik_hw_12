@@ -16,10 +16,13 @@ let currentThread = {
         "me": [],
         'user': []
     },
-    'idUser': ''
+    'idUser': '',
+    'messages': []
 }
+let dialogMessagesBlock = document.getElementById('dialog-messages');
+
 if (!localStorage.token)
-    window.location.href = "../login/login.html";
+    window.location.href = "components/login/login.html";
 
 async function getUserById(_id) {
     const options = {
@@ -81,7 +84,7 @@ async function getThreads() {
         },
     };
 
-    let response = await fetch('https://geekhub-frontend-js-9.herokuapp.com/api/threads', options);
+    let response = await fetch('https://geekhub-frontend-js-9.herokuapp.com/api/threads?sort=desc', options);
     return await response.json();
 }
 
@@ -121,6 +124,27 @@ async function sendMessage(_id, text) {
     return await response.json();
 }
 
+function updateThreadMessages() {
+    getThreadMessages(currentThread._id).then(data => {
+        if (currentThread.messages.length === data.length) {
+
+        } else {
+            currentThread.messages = data;
+            dialogMessagesBlock.innerHTML = "";
+            data.map(x => {
+                renderThreadMessage(x.body, x.user, currentThread.me);
+            });
+            dialogMessagesBlock.scrollTop = dialogMessagesBlock.scrollHeight;
+        }
+    });
+}
+
+function unlogin() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('_id');
+    window.location.href = "components/login/login.html";
+}
+
 function getThread() {
     let dialogsBlock = document.getElementById('dialogs');
     dialogsBlock.innerHTML = "";
@@ -134,19 +158,22 @@ function getThread() {
             let thread = json[i];
             let user;
 
-            if (thread.users[1]._id === me._id)
-                user = thread.users[0];
-            else
-                user = thread.users[1];
+            if (thread.users.length === 2) {
+                if (thread.users[1]._id === me._id)
+                    user = thread.users[0];
+                else
+                    user = thread.users[1];
 
-            users.push(user);
-            renderThread(user.name, '', thread._id, "getThreadMessage");
+                users.push(user);
+                renderThread(user.name, "", thread._id, "getThreadMessage", thread.message.time);
+            }
         }
         renderCreateThread();
         let result = removeUsers(usersTmp, users, me);
-        result.map(user => {
-            renderThread(user.name, "", user._id, "createThread")
-        });
+        // result.map(user => {
+        //     renderThread(user.name, "tap to create", user._id, "createThread")
+        // });
+
     });
 }
 
@@ -175,6 +202,8 @@ function createThread(_id) {
 }
 
 function getThreadMessage(_id) {
+    setInterval(updateThreadMessages, 1000);
+    currentThread._id = _id;
     getCurrentUser().then(r => currentThread.me = r);
     getThreads().then(r => {
         r.filter(x => {
@@ -189,7 +218,8 @@ function getThreadMessage(_id) {
         getUserById(currentThread.idUser).then(r => {
             currentThread.user = r;
             getThreadMessages(_id).then(data => {
-                let dialogMessagesBlock = document.getElementById('dialog-messages');
+                currentThread.messages = data;
+                // let dialogMessagesBlock = document.getElementById('dialog-messages');
                 let form = document.getElementById('form');
                 let message = document.getElementById('message');
                 dialogMessagesBlock.innerHTML = "";
@@ -341,7 +371,7 @@ function renderCreateThread() {
     dialogsBlock.append(button);
 }
 
-function renderThread(name, message, _id, functionStr) {
+function renderThread(name, message, _id, functionStr, time) {
     let dialogsItemDiv = HTMLRender.render({
         tags: 'div',
         className: ['dialogs-item'],
