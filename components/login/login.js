@@ -2,6 +2,9 @@ email = document.getElementById("email");
 pass = document.getElementById('password');
 message = document.getElementById('message');
 
+if (localStorage.token)
+window.location.href = "components/messages/messages.html";
+
 
 async function login(email, pass) {
     const data = {
@@ -31,7 +34,8 @@ form.addEventListener("submit", function (e) {
         if (r.response.ok) {
             message.innerText = "Success";
             window.localStorage.setItem("token", r.response.headers.get('x-auth-token'));
-            window.location.href = "../messages/messages.html";
+            window.localStorage.setItem("_id", r.json._id);
+            window.location.href = "components/messages/messages.html";
         } else {
             message.classList.add("error");
             message.innerText = r.json.message;
