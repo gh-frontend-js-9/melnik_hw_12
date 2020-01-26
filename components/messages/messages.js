@@ -22,7 +22,7 @@ let currentThread = {
 let dialogMessagesBlock = document.getElementById('dialog-messages');
 
 if (!localStorage.token)
-    window.location.href = "components/login/login.html";
+    window.location.href = "../login/login.html";
 
 async function getUserById(_id) {
     const options = {
@@ -170,9 +170,9 @@ function getThread() {
         }
         renderCreateThread();
         let result = removeUsers(usersTmp, users, me);
-        // result.map(user => {
-        //     renderThread(user.name, "tap to create", user._id, "createThread")
-        // });
+        result.map(user => {
+            renderThread(user.name, "tap to create", user._id, "createThread")
+        });
 
     });
 }
