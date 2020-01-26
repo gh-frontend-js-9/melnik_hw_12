@@ -142,7 +142,7 @@ function updateThreadMessages() {
 function unlogin() {
     localStorage.removeItem('token');
     localStorage.removeItem('_id');
-    window.location.href = "components/login/login.html";
+    window.location.href = "../login/login.html";
 }
 
 function getThread() {
@@ -165,15 +165,18 @@ function getThread() {
                     user = thread.users[1];
 
                 users.push(user);
-                renderThread(user.name, "", thread._id, "getThreadMessage", thread.message.time);
+
+                if(thread.message !== null)
+                    renderThread(user.name, thread.message.body, thread._id, "getThreadMessage");
+                else
+                    renderThread(user.name, '', thread._id, "getThreadMessage");
             }
         }
         renderCreateThread();
         let result = removeUsers(usersTmp, users, me);
         result.map(user => {
-            renderThread(user.name, "tap to create", user._id, "createThread")
+            renderThread(user.name, "tap to create thread", user._id, "createThread")
         });
-
     });
 }
 
@@ -371,7 +374,7 @@ function renderCreateThread() {
     dialogsBlock.append(button);
 }
 
-function renderThread(name, message, _id, functionStr, time) {
+function renderThread(name, message, _id, functionStr) {
     let dialogsItemDiv = HTMLRender.render({
         tags: 'div',
         className: ['dialogs-item'],

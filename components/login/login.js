@@ -3,7 +3,7 @@ pass = document.getElementById('password');
 message = document.getElementById('message');
 
 if (localStorage.token)
-window.location.href = "components/messages/messages.html";
+window.location.href = "../messages/messages.html";
 
 
 async function login(email, pass) {
@@ -35,7 +35,7 @@ form.addEventListener("submit", function (e) {
             message.innerText = "Success";
             window.localStorage.setItem("token", r.response.headers.get('x-auth-token'));
             window.localStorage.setItem("_id", r.json._id);
-            window.location.href = "components/messages/messages.html";
+            window.location.href = "../messages/messages.html";
         } else {
             message.classList.add("error");
             message.innerText = r.json.message;
