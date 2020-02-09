@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"
+          integrity="sha384-REHJTs1r2ErKBuJB0fCK99gCYsVjwxHrSU0N7I1zl9vZbggVJXRMsv/sLlOAGb4M" crossorigin="anonymous">
+    <link rel="stylesheet" href="../assets/styles/messages.css">
+</head>
+<body>
+<header>
+    <img class="header__logo" src="../../assets/images/logo.png" alt="">
+    <div class="header__nav">
+        <button>
+            Add
+            <i class="fas fa-plus"></i>
+        </button>
+        <i class="fas fa-search"></i>
+        <i class="far fa-bell"></i>
+        <div class="header__avatar">
+            <img src="../../assets/images/user2.jpg" alt="">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <i class="fas fa-times" onclick="unlogin()"></i>
+    </div>
+</header>
+<section>
+    <div class="section__nav">
+        <i class="fas fa-home"></i>
+        <i class="fas fa-bars"></i>
+        <i class="fas fa-chart-line"></i>
+        <i class="fas fa-envelope"></i>
+        <i class="fas fa-user-friends"></i>
+    </div>
+    <div class="section__content">
+        <div class="content__nav">
+            <div class="content__nav__types">
+                <span>
+                    <i class="fas fa-inbox"></i>
+                    Inbox (2)
+                </span>
+                <span>
+                    <i class="fab fa-telegram-plane"></i>
+                    Sent
+                </span>
+                <span>
+                    <i class="fas fa-trash"></i>
+                    Trash
+                </span>
+            </div>
+            <div class="content__nav__filter">
+                Filter message:
+                <select>
+                    <option value="1" selected>Date</option>
+                </select>
+            </div>
+        </div>
+        <div class="content_content">
+            <div class="dialogs" id="dialogs"></div>
+            <div class="dialog">
+                <div class="dialog-items" id="dialog-messages"></div>
+                <form id="form" style="width: 100%">
+                    <input type="text" id="message" placeholder="Write a message..." style="display: none">
+                </form>
+            </div>
+            <div class="user_info" id="user_info"></div>
+        </div>
+    </div>
+</section>
+</body>
+<script src="messages.js"></script>
+</html>
